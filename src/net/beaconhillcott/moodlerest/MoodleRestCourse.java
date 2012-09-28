@@ -1,10 +1,14 @@
 
 package net.beaconhillcott.moodlerest;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.w3c.dom.NodeList;
 
 /**
@@ -84,6 +88,26 @@ public class MoodleRestCourse {
         return crs[0];
     }
 
+    public static void deleteCourses(long[] courseids) throws MoodleRestCourseException, UnsupportedEncodingException, MoodleRestException {
+        String functionCall=MoodleCallRestWebService.isLegacy()?MoodleServices.MOODLE_COURSE_DELETE_COURSES:MoodleServices.CORE_COURSE_DELETE_COURSES;
+        try {
+            StringBuilder data=new StringBuilder();
+            if (MoodleCallRestWebService.getAuth()==null)
+                throw new MoodleRestCourseException();
+            else
+                data.append(MoodleCallRestWebService.getAuth());//data.append(URLEncoder.encode("wstoken", MoodleServices.ENCODING)).append("=").append(URLEncoder.encode(MoodleCallRestWebService.getToken(), MoodleServices.ENCODING));
+            data.append("&").append(URLEncoder.encode("wsfunction", MoodleServices.ENCODING)).append("=").append(URLEncoder.encode(functionCall, MoodleServices.ENCODING));
+            for (int i=0;i<courseids.length;i++) {
+                if (courseids[i]<1) throw new MoodleRestCourseException(MoodleRestCourseException.INVALID_COURSEID); else data.append("&").append(URLEncoder.encode("courseids["+i+"]", MoodleServices.ENCODING)).append("=").append(courseids[i]);
+            }
+            data.trimToSize();
+            MoodleCallRestWebService.call(data.toString());
+        }  catch (IOException ex) {
+            Logger.getLogger(MoodleRestUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    
     /**
      * <p>Method to return an array of MoodleCourse objects given an array of id's of the courses within Moodle.<br />
      * This call communicates with the Moodle WebServices.</p>

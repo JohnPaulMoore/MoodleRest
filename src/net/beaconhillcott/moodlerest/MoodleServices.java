@@ -181,6 +181,10 @@ public class MoodleServices {
    */
   public static final String CORE_COURSE_CREATE_COURSES="core_course_create_courses";
   /**
+  *
+  */
+ public static final String CORE_COURSE_DELETE_COURSES="core_course_delete_courses";
+  /**
    *
    */
   public static final String CORE_COURSE_GET_CONTENTS="core_course_get_contents";
@@ -193,7 +197,13 @@ public class MoodleServices {
    *
    */
   public static final String MOODLE_COURSE_CREATE_COURSES="moodle_course_create_courses";
+
   
+  /**
+  *
+  */
+ public static final String MOODLE_COURSE_DELETE_COURSES="moodle_course_delete_courses";
+
   // Message functions
   /**
    *
